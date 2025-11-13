@@ -67,3 +67,4 @@ def forward(speed):
   print(f"going fowrad at speed{speed}%")
   GPIO.output(31, False)
   pinOneMotor_pwm.ChangeDutyCycle(speed)
+#More code to come, just going to the gym.
