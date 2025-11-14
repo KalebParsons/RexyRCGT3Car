@@ -62,9 +62,51 @@ except RuntimeError:
 
 #Here will be where we begin to configure the pins of a raspberry pi to our DC motors.
 GPIO.setmode(GPIO.BCM)
+driveMotor_pwm = GPIO.PWM(18, 100)#23 represents the pin number and 100 represents the frequency
+driveMotor_pwm.start(0) #This starts our motor at speed 0. the motor is off.
+steerMotor_pwm = GPIO.PWM(23, 100)
+steerMotor_pwm.start(0)
+GPIO.setup(18, GPIO.OUT)
+GPIO.setup(23, GPIO.OUT)
+
+#Annotations can be found in the description file for this part.
 
 def forward(speed):
   print(f"going fowrad at speed{speed}%")
-  GPIO.output(31, False)
-  pinOneMotor_pwm.ChangeDutyCycle(speed)
-#More code to come, just going to the gym.
+  GPIO.output(18, False)
+  driveMotor_pwm.ChangeDutyCycle(speed)
+  #changing the duty cycle tells us how much of the PWM cycle stays on. This allows us to modulate the power of the motors given the inputs of the
+  #controller. The frequency will stay fixed, but the length of the on and off wave change depending on the duty cycle.
+
+def backward(speed):
+  print(f"going backward at speed{speed}%")
+  GPIO.output(18, True)
+  driveMotor_pwm.ChangeDutyCycle(speed)
+
+def left(speed):
+  print(f"turning left at speed{speed}%")
+  GPIO.output(23, False)
+  steerMotor_pwm.ChangeDutyCycle(speed)
+
+def right(speed):
+  print(f"turning right at speed{speed}%")
+  GPIO.output(23, True)
+  steerMotor_pwm.ChangeDutyCycle(speed)
+
+#Test code to test our movement controls
+
+#Test forward
+forward(100)
+time.sleep(1) #Helps slow our program down for testing purposes. waits one second before moving to the next line of code.
+
+#test left:
+left(70)
+time.sleep(1)
+
+#test right:
+right(65)
+time.sleep(1)
+
+#test backward:
+backward(1)
+time.sleep(1)
